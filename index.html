@@ -25,6 +25,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'intreprion: none;
       font-family: 'Poppins', sans-serif;
     }
 
@@ -34,13 +35,13 @@
       line-height: 1.6;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 1rem;
     }
 
     header {
       text-align: center;
-      margin-bottom: 2.5rem;
-      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
       background: var(--light);
       border-radius: 10px;
       box-shadow: var(--shadow);
@@ -48,7 +49,7 @@
 
     h1 {
       font-weight: 600;
-      font-size: 2.2rem;
+      font-size: clamp(1.8rem, 5vw, 2rem);
       margin-bottom: 0.5rem;
     }
 
@@ -63,33 +64,38 @@
       color: white;
       padding: 0.3rem 1rem;
       border-radius: 20px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       margin-top: 0.5rem;
     }
 
     #app {
       display: grid;
-      grid-template-columns: 1fr 350px;
-      gap: 2rem;
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 900px) {
       #app {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 350px;
+      }
+      #cart {
+        position: sticky;
+        top: 2rem;
       }
     }
 
     .menu-category {
       background: var(--light);
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 10px;
       box-shadow: var(--shadow);
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     h2 {
       font-weight: 500;
-      margin-bottom: 1.5rem;
+      font-size: clamp(1.4rem, 4vw, 1.6rem);
+      margin-bottom: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--medium-gray);
       color: var(--primary);
@@ -98,14 +104,14 @@
     }
 
     h2 i {
-      margin-right: 0.8rem;
+      margin-right: 0.5rem;
       color: var(--secondary);
     }
 
     .menu-items {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.5rem;
+      gap: 1rem;
     }
 
     .menu-item {
@@ -113,34 +119,37 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      transition: var(--transition);
       border: 1px solid var(--medium-gray);
+      transition: var(--transition);
     }
 
-    .menu-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    @media (hover: hover) {
+      .menu-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
     }
 
     .item-image {
       height: 150px;
       background-size: cover;
       background-position: center;
+      image-rendering: optimizeSpeed;
     }
 
     .item-details {
-      padding: 1.2rem;
+      padding: 1rem;
     }
 
     .item-name {
       font-weight: 500;
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 3vw, 1.1rem);
       margin-bottom: 0.5rem;
     }
 
     .item-description {
       color: var(--dark-gray);
-      font-size: 0.9rem;
+      font-size: clamp(0.85rem, 2.5vw, 0.9rem);
       margin-bottom: 1rem;
       min-height: 40px;
     }
@@ -154,23 +163,28 @@
     .item-price {
       font-weight: 600;
       color: var(--secondary);
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 3vw, 1.1rem);
     }
 
     .add-btn {
       background: var(--secondary);
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1rem;
       border-radius: 5px;
       cursor: pointer;
       transition: var(--transition);
       display: flex;
       align-items: center;
+      font-size: 0.9rem;
+      touch-action: manipulation;
+      min-width: 80px;
     }
 
-    .add-btn:hover {
-      background: var(--primary);
+    @media (hover: hover) {
+      .add-btn:hover {
+        background: var(--primary);
+      }
     }
 
     .add-btn i {
@@ -179,16 +193,58 @@
 
     #cart {
       background: var(--light);
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 10px;
       box-shadow: var(--shadow);
-      position: sticky;
-      top: 2rem;
-      height: fit-content;
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
+    }
+
+    #cart.collapsed {
+      display: none;
+    }
+
+    #cart-toggle {
+      display: none;
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 899px) {
+      #cart-toggle {
+        display: flex;
+      }
+      #cart {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(100%, 350px);
+        height: 100%;
+        z-index: 999;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+      #cart.open {
+        transform: translateX(0);
+      }
     }
 
     #cartItems {
-      margin: 1.5rem 0;
+      margin: 1rem 0;
     }
 
     .cart-item {
@@ -209,11 +265,12 @@
 
     .cart-item-name {
       font-weight: 500;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
     .cart-item-price {
       color: var(--dark-gray);
-      font-size: 0.9rem;
+      font-size: clamp(0.85rem, 2.5vw, 0.9rem);
     }
 
     .cart-item-controls {
@@ -222,8 +279,8 @@
     }
 
     .quantity-btn {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: var(--medium-gray);
       color: var(--primary);
@@ -233,11 +290,14 @@
       justify-content: center;
       cursor: pointer;
       transition: var(--transition);
+      touch-action: manipulation;
     }
 
-    .quantity-btn:hover {
-      background: var(--accent);
-      color: white;
+    @media (hover: hover) {
+      .quantity-btn:hover {
+        background: var(--accent);
+        color: white;
+      }
     }
 
     .quantity-value {
@@ -251,20 +311,23 @@
       border: none;
       color: var(--secondary);
       cursor: pointer;
-      margin-left: 1rem;
+      margin-left: 0.5rem;
       font-size: 1.1rem;
       transition: var(--transition);
+      touch-action: manipulation;
     }
 
-    .remove-btn:hover {
-      color: var(--primary);
+    @media (hover: hover) {
+      .remove-btn:hover {
+        color: var(--primary);
+      }
     }
 
     #cartTotal {
       text-align: right;
       font-weight: 600;
-      font-size: 1.2rem;
-      margin: 1.5rem 0;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      margin: 1rem 0;
       padding-top: 1rem;
       border-top: 2px solid var(--medium-gray);
     }
@@ -273,20 +336,23 @@
       background: var(--success);
       color: white;
       border: none;
-      padding: 1rem;
+      padding: 0.8rem;
       width: 100%;
       border-radius: 5px;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 3vw, 1rem);
       cursor: pointer;
       transition: var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
+      touch-action: manipulation;
     }
 
-    #placeOrder:hover {
-      background: #219653;
+    @media (hover: hover) {
+      #placeOrder:hover {
+        background: #219653;
+      }
     }
 
     #placeOrder i {
@@ -296,10 +362,10 @@
     #orderConfirmation {
       display: none;
       background: var(--light);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 10px;
       text-align: center;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       box-shadow: var(--shadow);
       animation: fadeIn 0.5s ease;
     }
@@ -310,45 +376,46 @@
     }
 
     .confirmation-icon {
-      font-size: 3rem;
+      font-size: 2.5rem;
       color: var(--success);
       margin-bottom: 1rem;
     }
 
     .empty-cart {
       text-align: center;
-      padding: 2rem;
+      padding: 1.5rem;
       color: var(--dark-gray);
     }
 
     .empty-cart i {
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin-bottom: 1rem;
       color: var(--medium-gray);
     }
 
-    /* Floating cart badge */
     .cart-badge {
       position: absolute;
-      top: -10px;
-      right: -10px;
+      top: -8px;
+      right: -8px;
       background: var(--secondary);
       color: white;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: bold;
     }
 
-    /* Category tabs */
     .category-tabs {
       display: flex;
-      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
       border-bottom: 1px solid var(--medium-gray);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .category-tab {
@@ -356,6 +423,8 @@
       cursor: pointer;
       border-bottom: 3px solid transparent;
       transition: var(--transition);
+      white-space: nowrap;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
     .category-tab.active {
@@ -364,8 +433,10 @@
       font-weight: 500;
     }
 
-    .category-tab:hover:not(.active) {
-      border-bottom: 3px solid var(--accent);
+    @media (hover: hover) {
+      .category-tab:hover:not(.active) {
+        border-bottom: 3px solid var(--accent);
+      }
     }
   </style>
 </head>
@@ -378,26 +449,25 @@
   <div id="app">
     <main>
       <div class="category-tabs" id="categoryTabs"></div>
-      
       <div id="menu"></div>
     </main>
 
-    <aside id="cart">
+    <aside id="cart" class="collapsed">
       <div style="position: relative;">
         <h2><i class="fas fa-shopping-cart"></i> Your Order</h2>
         <div class="cart-badge" id="cartBadge">0</div>
       </div>
-      
       <ul id="cartItems">
         <div class="empty-cart">
           <i class="fas fa-shopping-basket"></i>
           <p>Your cart is empty</p>
         </div>
       </ul>
-      
       <div id="cartTotal"></div>
       <button id="placeOrder"><i class="fas fa-paper-plane"></i> Place Order</button>
     </aside>
+
+    <button id="cart-toggle"><i class="fas fa-shopping-cart"></i></button>
 
     <div id="orderConfirmation">
       <div class="confirmation-icon">
@@ -410,7 +480,7 @@
   </div>
 
   <script>
-    // Configuration
+    // Configuration (unchanged)
     const config = {
       tableName: "Delicious Food",
       menuData: {
@@ -488,6 +558,7 @@
     // DOM Elements
     const tableNumberEl = document.getElementById('tableNumber');
     const menuEl = document.getElementById('menu');
+    const cartEl = document.getElementById('cart');
     const cartItemsEl = document.getElementById('cartItems');
     const cartTotalEl = document.getElementById('cartTotal');
     const placeOrderBtn = document.getElementById('placeOrder');
@@ -495,12 +566,29 @@
     const orderIdEl = document.getElementById('orderId');
     const cartBadgeEl = document.getElementById('cartBadge');
     const categoryTabsEl = document.getElementById('categoryTabs');
+    const cartToggleEl = document.getElementById('cart-toggle');
 
     // Initialize
     tableNumberEl.textContent = config.tableName;
     renderCategoryTabs();
     renderMenu();
     updateCartBadge();
+
+    // Cart toggle functionality
+    cartToggleEl.addEventListener('click', () => {
+      cartEl.classList.toggle('open');
+      cartEl.classList.toggle('collapsed');
+    });
+
+    // Close cart when clicking outside (mobile only)
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth < 900 && cartEl.classList.contains('open')) {
+        if (!cartEl.contains(e.target) && !cartToggleEl.contains(e.target)) {
+          cartEl.classList.remove('open');
+          cartEl.classList.add('collapsed');
+        }
+      }
+    });
 
     // Render category tabs
     function renderCategoryTabs() {
@@ -513,6 +601,11 @@
           currentCategory = category;
           renderCategoryTabs();
           renderMenu();
+          // Close cart on category change (mobile only)
+          if (window.innerWidth < 900) {
+            cartEl.classList.remove('open');
+            cartEl.classList.add('collapsed');
+          }
         });
         categoryTabsEl.appendChild(tab);
       });
@@ -645,6 +738,7 @@
       const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
       cartBadgeEl.textContent = itemCount;
       cartBadgeEl.style.display = itemCount > 0 ? 'flex' : 'none';
+      cartToggleEl.querySelector('i').className = `fas fa-shopping-cart ${itemCount > 0 ? 'fa-beat' : ''}`;
     }
 
     // Place order
@@ -673,6 +767,12 @@
       cart = [];
       renderCart();
       updateCartBadge();
+      
+      // Close cart (mobile only)
+      if (window.innerWidth < 900) {
+        cartEl.classList.remove('open');
+        cartEl.classList.add('collapsed');
+      }
       
       // Hide confirmation after 5 seconds
       setTimeout(() => {
