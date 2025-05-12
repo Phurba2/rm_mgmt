@@ -25,7 +25,6 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'intreprion: none;
       font-family: 'Poppins', sans-serif;
     }
 
@@ -580,10 +579,14 @@
       cartEl.classList.toggle('collapsed');
     });
 
-    // Close cart when clicking outside (mobile only)
+    // Close cart when clicking outside (mobile only), excluding cart interactions
     document.addEventListener('click', (e) => {
       if (window.innerWidth < 900 && cartEl.classList.contains('open')) {
-        if (!cartEl.contains(e.target) && !cartToggleEl.contains(e.target)) {
+        // Only close if clicking outside cart and not on toggle or cart controls
+        if (!cartEl.contains(e.target) && 
+            !cartToggleEl.contains(e.target) && 
+            !e.target.closest('.quantity-btn') && 
+            !e.target.closest('.remove-btn')) {
           cartEl.classList.remove('open');
           cartEl.classList.add('collapsed');
         }
