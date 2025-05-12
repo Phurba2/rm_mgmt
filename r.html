@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gourmet Table Order | Restaurant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --secondary: #e74c3c;
+      --accent: #3498db;
+      --light: #ffffff;
+      --light-gray: #f8f9fa;
+      --medium-gray: #e9ecef;
+      --dark-gray: #495057;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--light-gray);
+      color: var(--primary);
+      line-height: 1.6;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 1.5rem;
+      background: var(--light);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 span {
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    .table-number {
+      display: inline-block;
+      background: var(--secondary);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    #app {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      #app {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .menu-category {
+      background: var(--light);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--medium-gray);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    h2 i {
+      margin-right: 0.8rem;
+      color: var(--secondary);
+    }
+
+    .menu-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .menu-item {
+      background: var(--light);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      border: 1px solid var(--medium-gray);
+    }
+
+    .menu-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .item-image {
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .item-details {
+      padding: 1.2rem;
+    }
+
+    .item-name {
+      font-weight: 500;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .item-description {
+      color: var(--dark-gray);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      min-height: 40px;
+    }
+
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-price {
+      font-weight: 600;
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+
+    .add-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+
+    .add-btn:hover {
+      background: var(--primary);
+    }
+
+    .add-btn i {
+      margin-right: 0.5rem;
+    }
+
+    #cart {
+      background: var(--light);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+    }
+
+    #cartItems {
+      margin: 1.5rem 0;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 500;
+    }
+
+    .cart-item-price {
+      color: var(--dark-gray);
+      font-size: 0.9rem;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--medium-gray);
+      color: var(--primary);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .quantity-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .quantity-value {
+      margin: 0 0.5rem;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--secondary);
+      cursor: pointer;
+      margin-left: 1rem;
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    .remove-btn:hover {
+      color: var(--primary);
+    }
+
+    #cartTotal {
+      text-align: right;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin: 1.5rem 0;
+      padding-top: 1rem;
+      border-top: 2px solid var(--medium-gray);
+    }
+
+    #placeOrder {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 1rem;
+      width: 100%;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #placeOrder:hover {
+      background: #219653;
+    }
+
+    #placeOrder i {
+      margin-right: 0.5rem;
+    }
+
+    #orderConfirmation {
+      display: none;
+      background: var(--light);
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 2rem;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .confirmation-icon {
+      font-size: 3rem;
+      color: var(--success);
+      margin-bottom: 1rem;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 2rem;
+      color: var(--dark-gray);
+    }
+
+    .empty-cart i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--medium-gray);
+    }
+
+    /* Floating cart badge */
+    .cart-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    /* Category tabs */
+    .category-tabs {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .category-tab {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+    }
+
+    .category-tab.active {
+      border-bottom: 3px solid var(--secondary);
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .category-tab:hover:not(.active) {
+      border-bottom: 3px solid var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gourmet Table Order</h1>
+    <div class="table-number">Table: <span id="tableNumber">Delicious Food</span></div>
+  </header>
+
+  <div id="app">
+    <main>
+      <div class="category-tabs" id="categoryTabs"></div>
+      
+      <div id="menu"></div>
+    </main>
+
+    <aside id="cart">
+      <div style="position: relative;">
+        <h2><i class="fas fa-shopping-cart"></i> Your Order</h2>
+        <div class="cart-badge" id="cartBadge">0</div>
+      </div>
+      
+      <ul id="cartItems">
+        <div class="empty-cart">
+          <i class="fas fa-shopping-basket"></i>
+          <p>Your cart is empty</p>
+        </div>
+      </ul>
+      
+      <div id="cartTotal"></div>
+      <button id="placeOrder"><i class="fas fa-paper-plane"></i> Place Order</button>
+    </aside>
+
+    <div id="orderConfirmation">
+      <div class="confirmation-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Order Placed Successfully!</h2>
+      <p>Your delicious food will be served shortly.</p>
+      <p>Order ID: <strong id="orderId"></strong></p>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const config = {
+      tableName: "Delicious Food",
+      menuData: {
+        "Appetizers": [
+          { 
+            id: 1, 
+            name: "Margherita Pizza", 
+            price: 12.99, 
+            description: "Classic pizza with tomato sauce, mozzarella, and basil",
+            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          },
+          { 
+            id: 2, 
+            name: "Truffle Pasta", 
+            price: 16.50, 
+            description: "Homemade pasta with black truffle cream sauce",
+            image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          }
+        ],
+        "Main Courses": [
+          { 
+            id: 3, 
+            name: "Grilled Salmon", 
+            price: 22.99, 
+            description: "Fresh Atlantic salmon with lemon butter sauce",
+            image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          },
+          { 
+            id: 4, 
+            name: "Filet Mignon", 
+            price: 28.99, 
+            description: "8oz premium cut with red wine reduction",
+            image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          }
+        ],
+        "Desserts": [
+          { 
+            id: 5, 
+            name: "Chocolate Lava Cake", 
+            price: 8.99, 
+            description: "Warm chocolate cake with molten center and vanilla ice cream",
+            image: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          },
+          { 
+            id: 6, 
+            name: "Crème Brûlée", 
+            price: 7.50, 
+            description: "Classic vanilla bean custard with caramelized sugar top",
+            image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          }
+        ],
+        "Drinks": [
+          { 
+            id: 7, 
+            name: "Signature Cocktail", 
+            price: 10.99, 
+            description: "Our award-winning mix of premium spirits",
+            image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          },
+          { 
+            id: 8, 
+            name: "Wine Selection", 
+            price: 9.99, 
+            description: "Glass of our sommelier's choice",
+            image: "https://images.unsplash.com/photo-1559526324-593bc073d938?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+          }
+        ]
+      }
+    };
+
+    // State
+    let cart = [];
+    let currentCategory = Object.keys(config.menuData)[0];
+
+    // DOM Elements
+    const tableNumberEl = document.getElementById('tableNumber');
+    const menuEl = document.getElementById('menu');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const placeOrderBtn = document.getElementById('placeOrder');
+    const orderConfirmationEl = document.getElementById('orderConfirmation');
+    const orderIdEl = document.getElementById('orderId');
+    const cartBadgeEl = document.getElementById('cartBadge');
+    const categoryTabsEl = document.getElementById('categoryTabs');
+
+    // Initialize
+    tableNumberEl.textContent = config.tableName;
+    renderCategoryTabs();
+    renderMenu();
+    updateCartBadge();
+
+    // Render category tabs
+    function renderCategoryTabs() {
+      categoryTabsEl.innerHTML = '';
+      Object.keys(config.menuData).forEach(category => {
+        const tab = document.createElement('div');
+        tab.className = `category-tab ${category === currentCategory ? 'active' : ''}`;
+        tab.textContent = category;
+        tab.addEventListener('click', () => {
+          currentCategory = category;
+          renderCategoryTabs();
+          renderMenu();
+        });
+        categoryTabsEl.appendChild(tab);
+      });
+    }
+
+    // Render menu
+    function renderMenu() {
+      menuEl.innerHTML = '';
+      
+      const category = config.menuData[currentCategory];
+      const section = document.createElement('div');
+      section.className = 'menu-category';
+      
+      const itemsContainer = document.createElement('div');
+      itemsContainer.className = 'menu-items';
+      
+      category.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'menu-item';
+        itemEl.innerHTML = `
+          <div class="item-image" style="background-image: url('${item.image}')"></div>
+          <div class="item-details">
+            <h3 class="item-name">${item.name}</h3>
+            <p class="item-description">${item.description}</p>
+            <div class="item-footer">
+              <span class="item-price">$${item.price.toFixed(2)}</span>
+              <button class="add-btn" onclick="addToCart(${item.id})">
+                <i class="fas fa-plus"></i> Add
+              </button>
+            </div>
+          </div>
+        `;
+        itemsContainer.appendChild(itemEl);
+      });
+      
+      section.appendChild(itemsContainer);
+      menuEl.appendChild(section);
+    }
+
+    // Add item to cart
+    function addToCart(itemId) {
+      const category = Object.values(config.menuData).flat();
+      const item = category.find(i => i.id === itemId);
+      
+      const existingItem = cart.find(i => i.id === item.id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+      
+      renderCart();
+      updateCartBadge();
+      
+      // Visual feedback
+      const btn = event.target.closest('.add-btn');
+      btn.innerHTML = '<i class="fas fa-check"></i> Added';
+      btn.style.background = 'var(--success)';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-plus"></i> Add';
+        btn.style.background = 'var(--secondary)';
+      }, 1000);
+    }
+
+    // Update cart quantity
+    function updateQuantity(index, change) {
+      const item = cart[index];
+      item.quantity += change;
+      
+      if (item.quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      
+      renderCart();
+      updateCartBadge();
+    }
+
+    // Remove item from cart
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+      updateCartBadge();
+    }
+
+    // Render cart
+    function renderCart() {
+      cartItemsEl.innerHTML = '';
+      
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-basket"></i>
+            <p>Your cart is empty</p>
+          </div>
+        `;
+        cartTotalEl.textContent = '';
+        return;
+      }
+      
+      let total = 0;
+      
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+          </div>
+          <div class="cart-item-controls">
+            <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+            <span class="quantity-value">${item.quantity}</span>
+            <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+            <button class="remove-btn" onclick="removeFromCart(${index})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        cartItemsEl.appendChild(li);
+      });
+      
+      cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    // Update cart badge
+    function updateCartBadge() {
+      const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartBadgeEl.textContent = itemCount;
+      cartBadgeEl.style.display = itemCount > 0 ? 'flex' : 'none';
+    }
+
+    // Place order
+    placeOrderBtn.addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Please add items to your cart before placing an order.');
+        return;
+      }
+      
+      // Generate random order ID
+      const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
+      orderIdEl.textContent = orderId;
+      
+      // Show confirmation
+      orderConfirmationEl.style.display = 'block';
+      
+      // In a real app, you would send the order to a server here
+      console.log('Order placed:', {
+        table: config.tableName,
+        items: cart,
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        orderId: orderId
+      });
+      
+      // Clear cart
+      cart = [];
+      renderCart();
+      updateCartBadge();
+      
+      // Hide confirmation after 5 seconds
+      setTimeout(() => {
+        orderConfirmationEl.style.display = 'none';
+      }, 5000);
+    });
+
+    // Make functions available globally
+    window.addToCart = addToCart;
+    window.updateQuantity = updateQuantity;
+    window.removeFromCart = removeFromCart;
+  </script>
+</body>
+</html>
